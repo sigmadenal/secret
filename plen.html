@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Message Viewer</title>
+  <style>
+    
+    body {
+      font-family: PT Sans, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #b20000, #ff4f4f, #e60000);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    
+    .container {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      z-index: 1;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255,255,255,0.6);
+    }
+
+    .message {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #b20000;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      width: 200px;
+      margin: 0 auto;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: white;
+      color: #b20000;
+      border-radius: 5px;
+      border: 2px solid #b20000;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    button:hover {
+      background-color: #b20000;
+      color: white;
+    }
+
+    
+    .floating-text {
+      position: fixed;
+      top: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 30px;
+      font-weight: bold;
+      z-index: 1000;
+      animation: colorShift 6s linear infinite; /* Only color changes */
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    .floating-text:hover {
+      transform: translateX(-50%) scale(1.2);
+    }
+    @keyframes colorShift {
+      0%   { color: #ffffff; }
+      25%  { color: #ffd5d5; }
+      50%  { color: #ffffff; }
+      75%  { color: #ffd5d5; }
+      100% { color: #ffffff; }
+    }
+
+    
+    .hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .heart {
+      position: absolute;
+      bottom: -40px;
+      width: 40px;
+      height: 40px;
+      background: url("data:image/svg+xml,%3Csvg fill='%23fff' width='50' height='50' viewBox='0 0 32 29.6'%3E%3Cpath d='M23.6 0c-2.4 0-4.6 1-6.6 2.8C15 1 12.8 0 10.4 0 4.7 0 0 4.7 0 10.4c0 5.4 4.3 9.4 10.9 15.3 1.4 1.3 3 2.7 4.7 4.2l.9.7.9-.7c1.7-1.5 3.3-2.9 4.7-4.2C27.7 19.8 32 15.8 32 10.4 32 4.7 27.3 0 21.6 0z' /%3E%3C/svg%3E") no-repeat center;
+      background-size: contain;
+      opacity: 0.7;
+      animation: floatUp 8s linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0);        opacity: 0; }
+      10%  { opacity: 0.8; }
+      100% { transform: translateY(-120vh);  opacity: 0; }
+    }
+    .heart:nth-child(1)  { left: 10%;  animation-delay: 0s;  }
+    .heart:nth-child(2)  { left: 20%;  animation-delay: 2s;  }
+    .heart:nth-child(3)  { left: 30%;  animation-delay: 4s;  }
+    .heart:nth-child(4)  { left: 40%;  animation-delay: 1s;  }
+    .heart:nth-child(5)  { left: 50%;  animation-delay: 3s;  }
+    .heart:nth-child(6)  { left: 60%;  animation-delay: 5s;  }
+    .heart:nth-child(7)  { left: 70%;  animation-delay: 2s;  }
+    .heart:nth-child(8)  { left: 80%;  animation-delay: 4.5s;}
+    .heart:nth-child(9)  { left: 25%;  animation-delay: 6s;  }
+    .heart:nth-child(10) { left: 75%;  animation-delay: 7s;  }
+
+    
+    .image {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50vw;
+      max-width: 700px;
+      height: auto;
+      border-radius: 10px;
+      z-index: 0;
+      animation: planeFloat 4s ease-in-out infinite alternate;
+    }
+    @keyframes planeFloat {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating hearts -->
+  <div class="hearts">
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+  </div>
+
+  <!-- Color-cycling floating text that grows on hover -->
+  <div class="floating-text" id="floatingMessage">
+    aviation rizz na valentine's day<3
+  </div>
+
+  <!-- Main container (only scales, no tilting) -->
+  <div class="container">
+    <div class="message" id="message">
+      Are you a turbulence warning? Because you got my legs shaking!
+    </div>
+    <div class="buttons">
+      <button id="backBtn" onclick="changeMessage('back')">Back</button>
+      <button id="nextBtn" onclick="changeMessage('next')">Next</button>
+    </div>
+  </div>
+
+  <!-- Floating plane image -->
+  <img src="file:///C:/Users/denij/Downloads/com.png" alt="plenisko" class="image">
+
+  <script>
+    const messages = [
+      "Are you a turbulence warning? Because you got my legs shaking!",
+      "Are you an A380? Because I'm ready for that long-haul action!",
+      "Are you a 00000KT CAVOK in METAR? Because with you, it's clear skies and smooth sailing!",
+      "Are you a well-trimmed aircraft? Because with you, everything feels perfectly balanced!",
+      "Are you a CAT III landing? Because even in zero visibility, I trust you to bring me in safe and sound!",
+      "Are you a tailwind? Because you got me going faster than I expected!",
+      "Are you a refueling probe? Because I need you to slide in perfectly!",
+      "Are you a V1 speed? Because once I commit to you, there's no turning back!",
+      "Are you an autopilot? Because I'd love to let you take full control of my stick!",
+      "BONUS: Like all values in Haskell, my love for you is immutable and I want to 'lift' you up and 'bind' all our actions together."
+    ];
+
+    let currentIndex = 0;
+
+    function changeMessage(direction) {
+      if (direction === 'next') {
+        currentIndex = (currentIndex + 1) % messages.length;
+      } else {
+        currentIndex = (currentIndex - 1 + messages.length) % messages.length;
+      }
+      document.getElementById("message").innerText = messages[currentIndex];
+    }
+  </script>
+</body>
+</html>
